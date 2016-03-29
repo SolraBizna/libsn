@@ -1,0 +1,9 @@
+# Emacs-style backup
+*~
+# DOS-style backup
+*.bak
+
+# Compiled object file
+*.o
+# UNIX-style static library
+*.a
