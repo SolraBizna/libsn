@@ -144,8 +144,7 @@ namespace SN {
     SubstitutableString();
     SubstitutableString(const std::string& raw);
     void operator()(Context& ctx, std::ostream& out,
-                    const std::vector<std::reference_wrapper<const std::string>
-                    >&) const;
+                    const std::vector<std::string>&) const;
   };
 }
 namespace std {
@@ -228,17 +227,13 @@ namespace SN {
     // Returns the translated string for a given key, with the given positional
     // arguments.
     std::string Get(const Key& key,
-                    std::initializer_list<
-                    std::reference_wrapper<const std::string> > args = {});
+                    std::initializer_list<std::string> args = {});
     std::string Get(const Key& key,
-                    const std::vector<
-                    std::reference_wrapper<const std::string> >& args);
+                    const std::vector<std::string>& args);
     void Out(std::ostream& out, const Key& key,
-             std::initializer_list<
-             std::reference_wrapper<const std::string> > args = {});
+             std::initializer_list<std::string> args = {});
     void Out(std::ostream& out, const Key& key,
-             const std::vector<std::reference_wrapper<const std::string> >&
-             args);
+             const std::vector<std::string>& args);
   };
 }
 

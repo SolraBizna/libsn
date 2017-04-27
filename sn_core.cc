@@ -46,6 +46,7 @@ SubstitutableString::SubstitutableString(const std::string& raw) {
              || (*raw_it >= 'a' && *raw_it <= 'z')
              || (*raw_it >= '0' && *raw_it <= '9')
              || *raw_it == '_') {
+            ++raw_it;
             ++out_len;
           }
           else if(*raw_it == ')') {
@@ -152,9 +153,8 @@ SubstitutableString::SubstitutableString(const std::string& raw) {
 }
 
 void SubstitutableString::operator()(Context& ctx, std::ostream& out,
-                                     const std::vector<
-                                     std::reference_wrapper<const std::string>
-                                     >& args) const {
+                                     const std::vector<std::string>& args)
+  const {
   if(code.empty()) out << storage;
   else {
     auto it = code.cbegin();
@@ -166,7 +166,7 @@ void SubstitutableString::operator()(Context& ctx, std::ostream& out,
           if(ref > (int)args.size())
             out << '$' << ref;
           else
-            out << args[ref-1].get();
+            out << args[ref-1];
         }
         else {
           int32_t start = (*it++) & 0x7FFFFFFF;
@@ -462,37 +462,32 @@ const SubstitutableString* Context::Lookup(const Key& _key) {
 }
 
 std::string Context::Get(const Key& key,
-                         std::initializer_list<
-                         std::reference_wrapper<const std::string> > args) {
+                         std::initializer_list<std::string> args) {
   std::ostringstream ret;
   Out(ret, key, args);
   return ret.str();
 }
 
 std::string Context::Get(const Key& key,
-                         const std::vector<
-                         std::reference_wrapper<const std::string> >& args) {
+                         const std::vector<std::string>& args) {
   std::ostringstream ret;
   Out(ret, key, args);
   return ret.str();
 }
 
 void Context::Out(std::ostream& out, const Key& key,
-                  std::initializer_list<
-                  std::reference_wrapper<const std::string> > args) {
-  Out(out, key, std::vector<std::reference_wrapper<const std::string> >(args));
+                  std::initializer_list<std::string> args) {
+  Out(out, key, std::vector<std::string>(args));
 }
 
 void Context::Out(std::ostream& out, const Key& key,
-                  const std::vector<std::reference_wrapper<const std::string>
-                  >& args) {
+                  const std::vector<std::string>& args) {
   static const ConstKey MISSING_KEY_KEY = "__MISSING_KEY__"_Key;
   const SubstitutableString* p = Lookup(key);
   if(!p) {
     log << "SN: Missing key: " << key.AsString() << std::endl;
     auto str = key.AsString();
-    std::vector<std::reference_wrapper<const std::string> >
-      fake_args{str};
+    std::vector<std::string> fake_args{str};
     p = Lookup(MISSING_KEY_KEY);
     if(!p) p = &NO_SUCH_KEY;
     (*p)(*this, out, fake_args);
