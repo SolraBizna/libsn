@@ -6,7 +6,6 @@
 #include <iostream>
 #include <memory>
 #include <initializer_list>
-#include <functional>
 #include <unordered_map>
 
 #include <string.h>
