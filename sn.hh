@@ -221,6 +221,8 @@ namespace SN {
     // relevant cat for that language
     // if you don't call this, cats won't be loaded!
     Context& SetLanguage(const std::string& language = DEFAULT_LANGUAGE);
+    // Returns true if at least one message was successfully loaded.
+    operator bool() const { return !loaded_keys.empty(); }
     // Returns the SubstitutableString for the given key. You probably don't
     // want this. You probably want Get.
     const SubstitutableString* Lookup(const Key& key);
