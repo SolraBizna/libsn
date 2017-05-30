@@ -1,5 +1,7 @@
 #include "sn.hh"
 
+#include <array>
+
 // assumes already lowercase
 bool SN::Context::AcceptableLanguage(const std::string& language) {
   auto it = langinfo.find(language);
@@ -12,7 +14,7 @@ bool SN::Context::AcceptableLanguage(const std::string& language) {
 }
 
 static const std::array<const char*, 5> LOCALE_VARS
-{"LANG","LANGSPEC","LANGUAGE","LC_MESSAGES","LC_ALL"};
+{{"LANG","LANGSPEC","LANGUAGE","LC_MESSAGES","LC_ALL"}};
 
 std::string SN::Context::GetSystemLanguage(const std::string& default_choice) {
   MaybeGetLanguageList();
