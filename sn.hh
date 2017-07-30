@@ -7,6 +7,7 @@
 #include <memory>
 #include <initializer_list>
 #include <unordered_map>
+#include <functional>
 
 #include <string.h>
 
