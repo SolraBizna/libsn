@@ -137,8 +137,8 @@ SubstitutableString::SubstitutableString(const std::string& raw) {
           storage.resize(old_storage_size);
         }
       }
-      // else fall through
       storage.push_back('$');
+      // fallthrough
     default:
       storage.push_back(*raw_it);
       ++raw_it;
