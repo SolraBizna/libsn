@@ -101,7 +101,7 @@ Catalog file `en.utxt`:
     : usually adequate.
     : The fallback language should ideally be one which is intelligible to readers
     : of the primary language of this catalog.
-    Fallback: x-eo
+    Fallback: eo
     
     MESSAGE_1
     A nonblank line starts a message. Subsequent lines, up to a line containing
