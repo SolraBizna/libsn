@@ -47,7 +47,7 @@ C++ source file:
     
     int main(int argc, char** argv) {
         // don't forget the trailing slash!
-        sn.AddCatSource(std::make_shared<SN::FileCatSource>("./"));
+        sn.AddCatSource(std::make_unique<SN::FileCatSource>("./"));
         if(!sn.SetLanguage(sn.GetSystemLanguage())) {
             std::cerr << "Unable to load any language files.\n";
             return 1;

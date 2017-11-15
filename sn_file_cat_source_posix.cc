@@ -54,7 +54,7 @@ SN::FileCatSource::GetAvailableCats(std::function<void(std::string)> func) {
   }
 }
 
-std::shared_ptr<std::istream>
+std::unique_ptr<std::istream>
 SN::FileCatSource::OpenCat(const std::string& cat) {
   std::string code(cat);
   for(auto& c : code)
@@ -62,7 +62,7 @@ SN::FileCatSource::OpenCat(const std::string& cat) {
   std::string path;
   path.reserve(dirpath_plus_prefix.length() + code.length() + suffix.length());
   ((path += dirpath_plus_prefix) += code) += suffix;
-  auto ret = std::make_shared<std::fstream>
+  auto ret = std::make_unique<std::fstream>
     (path, std::ios::binary|std::ios::in);
   if(!ret->good()) return nullptr;
   else return ret;

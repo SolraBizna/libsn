@@ -35,7 +35,7 @@ namespace SN {
   public:
     virtual ~CatSource();
     virtual void GetAvailableCats(std::function<void(std::string)>) = 0;
-    virtual std::shared_ptr<std::istream> OpenCat(const std::string& cat) = 0;
+    virtual std::unique_ptr<std::istream> OpenCat(const std::string& cat) = 0;
   };
   /* FileCatSource is located in sn_file_cat_source_*.cc */
   class FileCatSource : public CatSource {
@@ -47,7 +47,7 @@ namespace SN {
                   const std::string& suffix = ".utxt");
     virtual ~FileCatSource();
     void GetAvailableCats(std::function<void(std::string)>) override;
-    std::shared_ptr<std::istream> OpenCat(const std::string& cat) override;
+    std::unique_ptr<std::istream> OpenCat(const std::string& cat) override;
   };
   class Key {
   protected:
@@ -186,7 +186,7 @@ namespace SN {
   };
   class Context {
     std::ostream& log;
-    std::vector<std::shared_ptr<CatSource> > cat_sources;
+    std::vector<std::unique_ptr<CatSource> > cat_sources;
     std::unordered_map<ConstKey, SubstitutableString> loaded_keys;
     bool langinfo_dirty;
     std::unordered_map<std::string, LangInfo> langinfo;
@@ -206,7 +206,7 @@ namespace SN {
     // subsequent cats override previous ones, wherever more than one provides
     // the same key
     // won't actually load any cats unless SetLanguage is subsequently called
-    Context& AddCatSource(const std::shared_ptr<CatSource>& loader);
+    Context& AddCatSource(std::unique_ptr<CatSource> loader);
     // (GetSystemLanguage is located in sn_get_system_language.cc)
     // Tries to guess the system language of the user. On Windows, this uses
     // GetUserPreferredUILanguages from the Win32 API. On all platforms, this

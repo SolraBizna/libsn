@@ -196,9 +196,9 @@ Context& Context::ClearCatSources() {
   return *this;
 }
 
-Context& Context::AddCatSource(const std::shared_ptr<CatSource>& loader) {
+Context& Context::AddCatSource(std::unique_ptr<CatSource> loader) {
   langinfo_dirty = true;
-  cat_sources.emplace_back(loader);
+  cat_sources.emplace_back(std::move(loader));
   return *this;
 }
 
@@ -253,7 +253,7 @@ void Context::MaybeLoadLangInfo(LangInfo& info) {
     got_enname = false, got_fallback = false;
   for(auto& src : cat_sources) {
     if(got_code && got_name && got_enname && got_fallback) break;
-    std::shared_ptr<std::istream> f = src->OpenCat(info.GetCode());
+    std::unique_ptr<std::istream> f = src->OpenCat(info.GetCode());
     if(!f) continue;
     got_some = true;
     int lineno = 0;
@@ -362,7 +362,7 @@ void Context::LoadLanguage(const std::string& language,
     }
     // log << "Now loading: " << it->second.GetCode() << std::endl;
     for(auto& src : cat_sources) {
-      std::shared_ptr<std::istream> f = src->OpenCat(it->second.GetCode());
+      std::unique_ptr<std::istream> f = src->OpenCat(it->second.GetCode());
       if(!f) continue;
       int lineno = 0;
       std::string line;
